@@ -1,4 +1,4 @@
-import 'package:book_app/data/shelfdata.dart';
+import 'package:book_app/tools/shelfdata.dart';
 import 'package:flutter/material.dart';
 
 class Shelf extends StatelessWidget {
@@ -10,7 +10,6 @@ class Shelf extends StatelessWidget {
         child: AppBar(
           title: SearchButton(),
           elevation: 0.0,
-          backgroundColor: Colors.transparent,
         ),
       ),
       body: ShelfBody(),
@@ -22,7 +21,7 @@ class ShelfBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
+      padding: EdgeInsets.all(15),
       child: GridView.count(
         crossAxisCount: 3,
         shrinkWrap: true,

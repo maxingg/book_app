@@ -13,18 +13,22 @@ class LoginProvider extends State<StatefulWidget>
   int index = 0; //当前看到图片的编号
   int indexToChange = 1;
 
+  int curWidget = 0;
+
   //图片列表
   List<String> imgList;
   Timer interval;
 
   LoginProvider() {
+    curWidget = 0;
+    
     imgList = List<String>();
     imgList.add("res/images/splash/splash0.jpg");
     imgList.add("res/images/splash/splash1.jpg");
     imgList.add("res/images/splash/splash2.jpg");
     imgList.add("res/images/splash/splash3.jpg");
     backgroundController =
-        AnimationController(vsync: this, duration: Duration(microseconds: 1000));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
     backgroundAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(backgroundController)
           ..addListener(() {
@@ -52,6 +56,12 @@ class LoginProvider extends State<StatefulWidget>
     interval = Timer.periodic(Duration(seconds: 5), (callback) {
       backgroundController.forward(from: 0);
     });
+  }
+
+  //切换注册或登录组件
+  switchLoginOrSignup() {
+    curWidget = curWidget == 0 ? 1 : 0;
+    notifyListeners();
   }
 
   @override

@@ -6,8 +6,8 @@ class Constants {
   //Color for theme
   static Color lightPrimary = Colors.white;
   static Color darkPrimary = Colors.black;
-  static Color lightAccent = Color(0xff795548);
-  static Color darkAccent = Color(0xff795548);
+  static Color lightAccent = Color(0xff8d6e63);
+  static Color darkAccent = Color(0xff8d6e63);
   static Color lightBG = Colors.white;
   static Color darkBG = Colors.black;
   static Color searchColor = Color(0xffeaeaea);
@@ -15,9 +15,12 @@ class Constants {
 
   static ThemeData lightTheme = ThemeData(
     backgroundColor: lightBG,
-    primaryColor: lightAccent,
+    primaryColor: lightPrimary,
     cursorColor: lightAccent,
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
     scaffoldBackgroundColor: lightBG,
+    accentColor: lightAccent,
     appBarTheme: AppBarTheme(
       elevation: 0,
       textTheme: TextTheme(

@@ -1,4 +1,4 @@
-import 'package:book_app/data/consts.dart';
+import 'package:book_app/tools/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,8 +31,9 @@ class AppProvider extends ChangeNotifier {
         
         //沉浸式状态栏
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor: c == "dark" ? Constants.darkPrimary : Constants.lightPrimary,
-          statusBarIconBrightness: c == "dark" ? Brightness.light: Brightness.dark,
+          // statusBarColor: c == "dark" ? Constants.darkPrimary : Constants.lightPrimary,
+          statusBarIconBrightness: c == "黑夜" ? Brightness.light: Brightness.dark,
+          statusBarColor: Colors.transparent,
         ));
       });
     });
@@ -46,13 +47,13 @@ class AppProvider extends ChangeNotifier {
   Future<ThemeData> checkTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ThemeData t;
-    String r = prefs.getString("theme") == null ? "light" : prefs.getString("theme");
-    if(r == "light") {
+    String r = prefs.getString("theme") == null ? "白天" : prefs.getString("theme");
+    if(r == "白天") {
       t = Constants.lightTheme;
-      setTheme(Constants.lightTheme, "light");
+      setTheme(Constants.lightTheme, "白天");
     }else {
       t = Constants.darkTheme;
-      setTheme(Constants.darkTheme, "dark");
+      setTheme(Constants.darkTheme, "黑夜");
     }
 
     return t;

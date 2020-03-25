@@ -1,4 +1,4 @@
-import 'package:book_app/data/book.dart';
+import 'package:book_app/tools/book.dart';
 import 'package:flutter/material.dart';
 
 class ConcretClassPage extends StatefulWidget {
@@ -17,16 +17,15 @@ class _ConcretClassPageState extends State<ConcretClassPage> {
   _ConcretClassPageState({this.arguments});
 
   Widget _getListData(context, index) {
-     return Column(
+    return Column(
       children: <Widget>[
-
-            AspectRatio(
-              aspectRatio: 1.2,
-                          child: Image.asset(
-                bookList[index]["imageUrl"],
-                fit: BoxFit.contain,
-              ),
-            ),
+        AspectRatio(
+          aspectRatio: 1.2,
+          child: Image.asset(
+            bookList[index]["imageUrl"],
+            fit: BoxFit.contain,
+          ),
+        ),
         Text(
           bookList[index]["title"],
           style: TextStyle(fontWeight: FontWeight.w200, fontSize: 12),
@@ -35,7 +34,7 @@ class _ConcretClassPageState extends State<ConcretClassPage> {
       ],
     );
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,15 +59,15 @@ class _ConcretClassPageState extends State<ConcretClassPage> {
               text: this.arguments["desc"],
             ),
             GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: 20.0,
-                  mainAxisSpacing: 10.0,
-                  crossAxisCount: 3,
-                ),
-                shrinkWrap: true,
-                itemCount: bookList.length,
-                itemBuilder: _getListData,
-                physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 20.0,
+                mainAxisSpacing: 10.0,
+                crossAxisCount: 3,
+              ),
+              shrinkWrap: true,
+              itemCount: bookList.length,
+              itemBuilder: _getListData,
+              physics: NeverScrollableScrollPhysics(),
             )
           ],
         ),
@@ -92,7 +91,7 @@ class DescText extends StatelessWidget {
               "res/images/shelf/wall.png",
               fit: BoxFit.contain,
               height: 150,
-              color: Color(0xffeeeeee),
+              color: Colors.green[100],
             )),
         Container(
           margin: EdgeInsets.only(left: 5),
