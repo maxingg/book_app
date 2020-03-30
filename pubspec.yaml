@@ -53,6 +53,7 @@ flutter:
    - res/images/splash/splash1.jpg
    - res/images/splash/splash2.jpg
    - res/images/splash/splash3.jpg
+   - res/images/other/place.png
    - res/images/splash/icon.png
    - res/images/shelf/coupe.jpg
    - res/images/shelf/douban.jpg

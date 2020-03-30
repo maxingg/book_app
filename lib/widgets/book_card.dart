@@ -1,3 +1,4 @@
+import 'package:book_app/model/book.dart';
 import 'package:book_app/provider/details_provider.dart';
 import 'package:book_app/views/book_detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,22 +8,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class BookCard extends StatelessWidget {
-  final String id; //充当tag
-  final String img; //封面
-  final String title; //标题
-  final String author; //作者
-  final String category; //所属类别
-  final String desc; //描述
+  final Book book;
 
-  const BookCard(
-      {Key key,
-      this.img,
-      this.title,
-      this.author,
-      this.category,
-      this.desc,
-      this.id})
-      : super(key: key); //作者
+  const BookCard({Key key, this.book}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +32,7 @@ class BookCard extends StatelessWidget {
                 context,
                 PageTransition(
                   type: PageTransitionType.rightToLeft,
-                  child: BookDetails(
-                    img: this.img,
-                    title: this.title,
-                    author: this.author,
-                    category: this.category,
-                    desc: this.desc,
-                  ),
+                  child: BookDetails(book),
                 ));
           },
           child: ClipRRect(
@@ -58,10 +40,10 @@ class BookCard extends StatelessWidget {
               Radius.circular(10),
             ),
             child: Hero(
-              tag: id,
+              tag: book.id,
               //网咯获取图片并保存至缓存
               child: CachedNetworkImage(
-                imageUrl: "$img",
+                imageUrl: "$book.img",
                 //占位图，使用循环进度条
                 placeholder: (context, url) => Center(
                   child: CircularProgressIndicator(),

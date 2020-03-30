@@ -24,4 +24,8 @@ class DetailsProvider extends ChangeNotifier{
 
   void setBook() {}
 
+  Future<List> getDoanload() async{
+    // List c = await downloadDB.check("id": )
+  }
+
 }

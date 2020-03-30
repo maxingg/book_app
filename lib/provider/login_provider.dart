@@ -13,11 +13,12 @@ class LoginProvider extends State<StatefulWidget>
   int index = 0; //当前看到图片的编号
   int indexToChange = 1;
 
-  int curWidget = 0;
+  int curWidget = 0;  //0代表登录页面
 
   //图片列表
   List<String> imgList;
   Timer interval;
+
 
   LoginProvider() {
     curWidget = 0;

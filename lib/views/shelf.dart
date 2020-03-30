@@ -1,4 +1,5 @@
 import 'package:book_app/tools/shelfdata.dart';
+import 'package:book_app/views/search_page.dart';
 import 'package:flutter/material.dart';
 
 class Shelf extends StatelessWidget {
@@ -46,7 +47,9 @@ class SearchButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: RaisedButton.icon(
-        onPressed: () {},
+        onPressed: () {
+          showSearch(context: context, delegate: searchBarDelegate());
+        },
         icon: Icon(
           Icons.search,
           size: 18,
@@ -54,8 +57,8 @@ class SearchButton extends StatelessWidget {
         label: Text("搜索"),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.5)),
-        color: Color(0xffeaeaea),
-        textColor: Color(0xffcdc1c5),
+        color: Theme.of(context).primaryColor,
+        elevation: 0,
       ),
     );
   }

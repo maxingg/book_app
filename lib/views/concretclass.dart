@@ -58,6 +58,7 @@ class _ConcretClassPageState extends State<ConcretClassPage> {
             DescText(
               text: this.arguments["desc"],
             ),
+
             GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 20.0,
@@ -108,6 +109,15 @@ class DescText extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class BroadText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text("精选", style: TextStyle(),),
     );
   }
 }

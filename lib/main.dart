@@ -5,6 +5,7 @@ import 'package:book_app/provider/login_provider.dart';
 import 'package:book_app/routes/routes.dart';
 import 'package:book_app/tools/consts.dart';
 import 'package:book_app/views/login_view.dart';
+import 'package:book_app/views/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           title: Constants.appName,
           theme: appProvider.theme,
           onGenerateRoute: onGenerateRoute,
-          home: LoginPage(),
+          home: Splash(),
         );
       },
     );
