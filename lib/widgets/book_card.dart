@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class BookCard extends StatelessWidget {
   final Book book;
 
-  const BookCard({Key key, this.book}) : super(key: key);
+  const BookCard(this.book,{Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +18,18 @@ class BookCard extends StatelessWidget {
       width: 120,
       child: Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        )),
-        elevation: 5,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        elevation: 4,
         child: InkWell(
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
           onTap: () {
-            Provider.of<DetailsProvider>(context, listen: false).setBook();
+            Provider.of<DetailsProvider>(context, listen: false).setBook(book);
+            Provider.of<DetailsProvider>(context, listen: false).getFeed();
             Navigator.push(
                 context,
                 PageTransition(
@@ -42,22 +44,22 @@ class BookCard extends StatelessWidget {
             child: Hero(
               tag: book.id,
               //网咯获取图片并保存至缓存
-              child: CachedNetworkImage(
-                imageUrl: "$book.img",
-                //占位图，使用循环进度条
-                placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (context, url, error) => Image.asset(
-                  "res/images/other/place.png",
-                  fit: BoxFit.cover,
-                ),
-                fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    imageUrl: "${book.img}",
+                    //占位图，使用循环进度条
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      "res/images/other/place.png",
+                      fit: BoxFit.fitHeight,
+                    ),
+                    fit: BoxFit.fitHeight,
+                  ),
               ),
             ),
           ),
         ),
-      ),
     );
   }
 }

@@ -119,7 +119,7 @@ class searchBarDelegate extends SearchDelegate<String> {
   Widget _createListView(BuildContext context, data) {
     List<Book> books = [];
     for(var book in data) {
-      books.add(Book.fromMap(book));
+      books.add(Book.fromJson(book));
     }
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 15),

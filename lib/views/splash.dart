@@ -79,7 +79,7 @@ class _SplashState extends State<Splash> {
   }
 
   void loginOrEnterDirectly() async {
-    Future<String> jwt = SharedPreferences.getInstance().then((prefs) {
+    SharedPreferences.getInstance().then((prefs) {
       return prefs.getString("jwt");
     }).then((String jwt) async {
       // print(jwt);

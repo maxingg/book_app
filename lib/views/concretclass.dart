@@ -1,5 +1,9 @@
-import 'package:book_app/tools/book.dart';
+import 'package:book_app/model/book.dart';
+import 'package:book_app/tools/dio_util.dart';
+import 'package:book_app/widgets/book_card.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConcretClassPage extends StatefulWidget {
   Map arguments;
@@ -14,27 +18,15 @@ class ConcretClassPage extends StatefulWidget {
 class _ConcretClassPageState extends State<ConcretClassPage> {
   Map arguments;
 
+  List<Book> bookItems = [];
+
   _ConcretClassPageState({this.arguments});
 
   Widget _getListData(context, index) {
-    return Column(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.2,
-          child: Image.asset(
-            bookList[index]["imageUrl"],
-            fit: BoxFit.contain,
-          ),
-        ),
-        Text(
-          bookList[index]["title"],
-          style: TextStyle(fontWeight: FontWeight.w200, fontSize: 12),
-          maxLines: 2,
-        )
-      ],
-    );
+    return BookCard(this.bookItems[index]);
+
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,22 +50,63 @@ class _ConcretClassPageState extends State<ConcretClassPage> {
             DescText(
               text: this.arguments["desc"],
             ),
-
+            Text(
+              "精选",
+              style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Divider(
+              color: Theme.of(context).textTheme.caption.color,
+            ),
+            SizedBox(
+              height: 10,
+            ),
             GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 20.0,
-                mainAxisSpacing: 10.0,
+                mainAxisSpacing: 20.0,
                 crossAxisCount: 3,
+                childAspectRatio: 0.68,
               ),
               shrinkWrap: true,
-              itemCount: bookList.length,
+              itemCount: bookItems.length,
               itemBuilder: _getListData,
               physics: NeverScrollableScrollPhysics(),
-            )
+            ),
+
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      return prefs.getString("jwt");
+    }).then((jwt) async {
+      RequestOptions requestOptions = RequestOptions(
+        headers: {"token": jwt},
+      );
+      Response response =
+          await DioUtil().get("/book/category/${arguments["title"]}", options: requestOptions);
+      if (response.statusCode == 200) return response.data;
+      return null;
+    }).then((val) {
+      List<Book> books = [];
+      if (val != null) {
+        for (var book in val) books.add(Book.fromJson(book));
+      }
+      setState(() {
+        this.bookItems = books;
+        print(bookItems);
+      });
+    });
   }
 }
 
@@ -117,7 +150,10 @@ class BroadText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("精选", style: TextStyle(),),
+      child: Text(
+        "精选",
+        style: TextStyle(),
+      ),
     );
   }
 }

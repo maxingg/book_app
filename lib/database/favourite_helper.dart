@@ -29,4 +29,13 @@ class FavouriteDB{
     return val;
   }
 
+  Future<List> check(Map item) async {
+    final db = ObjectDB(await getPath());
+    db.open();
+    List val = await db.find(item);
+    db.tidy();
+    await db.close();
+    return val;
+  }
+
 }

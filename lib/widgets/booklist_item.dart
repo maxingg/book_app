@@ -1,8 +1,10 @@
 import 'package:book_app/model/book.dart';
+import 'package:book_app/provider/details_provider.dart';
 import 'package:book_app/views/book_detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class BookListItem extends StatelessWidget {
   final Book book;
@@ -11,8 +13,11 @@ class BookListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DetailsProvider detailsProvider = Provider.of<DetailsProvider>(context);
     return InkWell(
       onTap: () {
+        detailsProvider.setBook(book);
+        detailsProvider.getFeed();
         Navigator.push(
             context,
             PageTransition(
