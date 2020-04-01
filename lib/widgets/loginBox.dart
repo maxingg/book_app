@@ -94,7 +94,6 @@ class _LoginBoxState extends State<LoginBox> {
                               password.length != 0 &&
                               checkValidUserName(username)) {
                             var jwt = await attemptLogin(username, password);
-                            print("阿里巴巴--$jwt");
                             if (jwt != null) {
                               SharedPreferences.getInstance().then((prefs) {
                                 prefs.setString("jwt", jwt);

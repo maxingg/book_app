@@ -146,7 +146,7 @@ class searchBarDelegate extends SearchDelegate<String> {
             width: 300,
           ),
           Text(
-            "Nothing Or some Errors",
+            "Nothing or some Errors",
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,

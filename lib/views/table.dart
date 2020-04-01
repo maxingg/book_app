@@ -58,14 +58,16 @@ class _TableBodyState extends State<TableBody> {
         return null;
       }
       return response.data;
-    }).then((val) {
+    }).then((val) async {
       List<Book> books = [];
       if (val != null) {
         for (var book in val) {
           Book b = Book.fromJson(book);
           if (books.indexOf(b) == -1) {
-            books.add(Book.fromJson(book));
-            favdb.add({"id": book["id"].toString(), "item": book});
+            books.add(b);
+            List c = await favdb.check({"id": b.id});
+            if(c.isEmpty)
+              favdb.add({"id": book["id"].toString(), "item": book});
           }
         }
         setState(() {

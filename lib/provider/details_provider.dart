@@ -22,7 +22,6 @@ class DetailsProvider extends ChangeNotifier{
   void removeFav() async{
     // favDB.remove({"id:" : });
     favDB.remove({"id": book.id}).then((v) {
-      print(v);
       checkFav();
     });
   }
