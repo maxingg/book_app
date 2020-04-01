@@ -94,10 +94,11 @@ class _LoginBoxState extends State<LoginBox> {
                               password.length != 0 &&
                               checkValidUserName(username)) {
                             var jwt = await attemptLogin(username, password);
+                            print("阿里巴巴--$jwt");
                             if (jwt != null) {
                               SharedPreferences.getInstance().then((prefs) {
                                 prefs.setString("jwt", jwt);
-                              }); 
+                              });
                               Navigator.pushReplacement(
                                 context,
                                 PageTransition(
@@ -105,6 +106,8 @@ class _LoginBoxState extends State<LoginBox> {
                                   child: MainView(),
                                 ),
                               );
+                            } else {
+                              displayDialog(context, "请检查输入信息和网络状况", "");
                             }
                           } else {
                             displayDialog(context, "用户名或密码不合法", "");
@@ -127,7 +130,7 @@ class _LoginBoxState extends State<LoginBox> {
   Future<String> attemptLogin(String username, String password) async {
     var data = {"userName": username, "passWord": password};
     Response res = await DioUtil().post('/user/user', data: data);
-    if (res.statusCode == 200) {
+    if (res != null && res.statusCode == 200) {
       return res.data["token"];
     }
     return null;

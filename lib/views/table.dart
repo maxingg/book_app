@@ -31,7 +31,7 @@ class _TableBodyState extends State<TableBody> {
   @override
   void initState() {
     // TODO: implement initState
-    
+
     super.initState();
     getFavDataFromDB();
     addFavDataFromCloud();
@@ -48,18 +48,22 @@ class _TableBodyState extends State<TableBody> {
   addFavDataFromCloud() {
     var favdb = FavouriteDB();
     SharedPreferences.getInstance().then((prefs) async {
-        var jwt = prefs.getString("jwt");
-        RequestOptions requestOptions = new RequestOptions(
-          headers: {"token": jwt},
-        );
-        Response response =
-            await DioUtil().get("/fav/favs", options: requestOptions);
-        return response.data;
-      }).then((val) {
-        List<Book> books = [];
+      var jwt = prefs.getString("jwt");
+      RequestOptions requestOptions = new RequestOptions(
+        headers: {"token": jwt},
+      );
+      Response response =
+          await DioUtil().get("/fav/favs", options: requestOptions);
+      if (response == null) {
+        return null;
+      }
+      return response.data;
+    }).then((val) {
+      List<Book> books = [];
+      if (val != null) {
         for (var book in val) {
           Book b = Book.fromJson(book);
-          if(books.indexOf(b) == -1) {
+          if (books.indexOf(b) == -1) {
             books.add(Book.fromJson(book));
             favdb.add({"id": book["id"].toString(), "item": book});
           }
@@ -67,31 +71,8 @@ class _TableBodyState extends State<TableBody> {
         setState(() {
           dls = books;
         });
-      });
-  }
-
-  getFavDataFromCloud() {
-    
-    // if (true) {
-    //   SharedPreferences.getInstance().then((prefs) async {
-    //     var jwt = prefs.getString("jwt");
-    //     RequestOptions requestOptions = new RequestOptions(
-    //       headers: {"token": jwt},
-    //     );
-    //     Response response =
-    //         await DioUtil().get("/fav/favs", options: requestOptions);
-    //     return response.data;
-    //   }).then((val) {
-    //     List<Book> books = [];
-    //     for (var book in val) {
-    //       books.add(Book.fromJson(book));
-    //       favdb.add({"id": book["id"].toString(), "item": book});
-    //     }
-    //     setState(() {
-    //       dls = books;
-    //     });
-    //   });
-    // }
+      }
+    });
   }
 
   @override

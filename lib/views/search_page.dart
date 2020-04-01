@@ -87,6 +87,7 @@ class searchBarDelegate extends SearchDelegate<String> {
             );
           }
           //这里是个巨坑..data的类型是Reponse<dynamic>，为了进行迭代，必须再取里面的data才可以
+          if (snapshot.data == null) return _createListView(context, null);
           return _createListView(context, snapshot.data.data);
         }
       },
@@ -95,19 +96,19 @@ class searchBarDelegate extends SearchDelegate<String> {
   }
 
   ThemeData appBarTheme(BuildContext context) {
-  assert(context != null);
-  final ThemeData theme = Theme.of(context);
-  assert(theme != null);
-  return theme.copyWith(
-    primaryColor: Theme.of(context).primaryColor,
-    primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-    primaryColorBrightness: Brightness.light,
-    primaryTextTheme: theme.textTheme,
-  );
-}
+    assert(context != null);
+    final ThemeData theme = Theme.of(context);
+    assert(theme != null);
+    return theme.copyWith(
+      primaryColor: Theme.of(context).primaryColor,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+      primaryColorBrightness: Brightness.light,
+      primaryTextTheme: theme.textTheme,
+    );
+  }
 
   Future _getSearchData(String key) async {
-    var response =  SharedPreferences.getInstance().then((prefs) {
+    var response = SharedPreferences.getInstance().then((prefs) {
       RequestOptions requestOptions = new RequestOptions(
         headers: {"token": prefs.getString("jwt")},
       );
@@ -118,20 +119,41 @@ class searchBarDelegate extends SearchDelegate<String> {
 
   Widget _createListView(BuildContext context, data) {
     List<Book> books = [];
-    for(var book in data) {
-      books.add(Book.fromJson(book));
+    if (data != null) {
+      for (var book in data) {
+        books.add(Book.fromJson(book));
+      }
+      return ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: books.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: BookListItem(books[index]),
+          );
+        },
+      );
     }
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: books.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-          child: BookListItem(books[index]),
-        );
-      },
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Image.asset(
+            "res/images/other/empty.png",
+            height: 300,
+            width: 300,
+          ),
+          Text(
+            "Nothing Or some Errors",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
