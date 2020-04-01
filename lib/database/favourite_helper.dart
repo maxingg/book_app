@@ -38,4 +38,21 @@ class FavouriteDB{
     return val;
   }
 
+  Future<List> listAll() async {
+    final db = ObjectDB(await getPath());
+    db.open();
+    List val = await db.find({});
+    db.tidy();
+    await db.close();
+    return val;
+  }
+
+  removeAll() async {
+    final db = ObjectDB(await getPath());
+    db.open();
+    await db.remove({});
+    db.tidy();
+    await db.close();
+  }
+
 }

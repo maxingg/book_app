@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:book_app/provider/app_provider.dart';
 import 'package:book_app/provider/details_provider.dart';
+import 'package:book_app/provider/favourites_provider.dart';
 import 'package:book_app/provider/login_provider.dart';
 import 'package:book_app/routes/routes.dart';
 import 'package:book_app/tools/consts.dart';
@@ -16,6 +17,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => AppProvider()),
         ChangeNotifierProvider(create: (_) => DetailsProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => FavouritesProvider()),
       ],
       child: MyApp(),
     ),

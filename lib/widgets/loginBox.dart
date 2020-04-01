@@ -4,6 +4,7 @@ import 'package:book_app/provider/login_provider.dart';
 import 'package:book_app/tools/dio_util.dart';
 import 'package:book_app/views/main_view.dart';
 import 'package:book_app/widgets/custom_alert.dart';
+import 'package:book_app/widgets/signIn_link.dart';
 import 'package:book_app/widgets/signup_link.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -131,6 +132,12 @@ class _LoginBoxState extends State<LoginBox> {
     }
     return null;
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 }
 
 class SignUpBox extends StatefulWidget {
@@ -246,6 +253,7 @@ class _SignUpBoxState extends State<SignUpBox> {
                 ],
               ),
             ),
+            SignIn(),
           ],
         ),
       ),

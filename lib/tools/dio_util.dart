@@ -68,6 +68,16 @@ class DioUtil {
     }
     return response;
   }
+
+  delete(url, {data, options}) async{
+    Response response;
+    try{
+      response = await _dio.delete(url, options: options);
+    } on DioError catch(e) {
+      print('请求失败---错误类型${e.type}--错误信息${e.message}--${e.request.uri}');
+    }
+    return response;
+  }
   
 }
 

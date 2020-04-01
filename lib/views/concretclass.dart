@@ -104,7 +104,6 @@ class _ConcretClassPageState extends State<ConcretClassPage> {
       }
       setState(() {
         this.bookItems = books;
-        print(bookItems);
       });
     });
   }

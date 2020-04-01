@@ -56,18 +56,10 @@ class _SplashState extends State<Splash> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              Feather.book_open,
-              color: Theme.of(context).accentColor,
-              size: 70,
-            ),
-            SizedBox(
-              height: 20,
-            ),
+            Image.asset("res/images/other/icon_logo.png", height: 150, fit: BoxFit.cover,),
             Text(
               "${Constants.appName}",
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
@@ -82,7 +74,6 @@ class _SplashState extends State<Splash> {
     SharedPreferences.getInstance().then((prefs) {
       return prefs.getString("jwt");
     }).then((String jwt) async {
-      // print(jwt);
       RequestOptions requestOptions = RequestOptions(
         headers: {
           "token": jwt,

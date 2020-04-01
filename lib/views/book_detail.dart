@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:book_app/model/book.dart';
 import 'package:book_app/provider/details_provider.dart';
 import 'package:book_app/tools/consts.dart';
+import 'package:book_app/tools/dio_util.dart';
 import 'package:book_app/widgets/description_text.dart';
 import 'package:book_app/widgets/download_alert.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:epub_kitty/epub_kitty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BookDetails extends StatelessWidget {
   final Book book;
@@ -29,14 +32,24 @@ class BookDetails extends StatelessWidget {
         (BuildContext context, DetailsProvider detailsProvider, Widget child) {
       return Scaffold(
         appBar: AppBar(
+          leading: new IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, "");
+            },
+          ),
           actions: <Widget>[
             IconButton(
               onPressed: () async {
                 if (detailsProvider.faved) {
-                  detailsProvider.removeFav();
+                  int code = await delFav();
+                  if(code == 200)
+                    detailsProvider.removeFav();
                 } else {
-                  detailsProvider.addFav();
-                }
+                  var code = await addFav();
+                  if(code == 201) 
+                    detailsProvider.addFav();
+                } 
               },
               icon: Icon(
                 detailsProvider.faved ? Icons.favorite : Feather.heart,
@@ -190,6 +203,28 @@ class BookDetails extends StatelessWidget {
     });
   }
 
+  addFav() async{
+    Response response = await SharedPreferences.getInstance().then((prefs) async {
+      var jwt = prefs.getString("jwt");
+      RequestOptions requestOptions = new RequestOptions(
+        headers: {"token": jwt},
+      );
+      return await DioUtil().post("/fav/favs/${book.id}", options: requestOptions);
+    });
+    return response.statusCode;
+  }
+
+  delFav() async{
+    Response response = await SharedPreferences.getInstance().then((prefs) async {
+      var jwt = prefs.getString("jwt");
+      RequestOptions requestOptions = new RequestOptions(
+        headers: {"token": jwt},
+      );
+      return await DioUtil().delete("/fav/favs/${book.id}", options: requestOptions);
+    });
+    return response.statusCode;
+  }
+
   downloadFile(BuildContext context, String url, String filename) async {
     PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.storage);
@@ -215,7 +250,6 @@ class BookDetails extends StatelessWidget {
         ? appDocDir.path + "/$filename.epub"
         : appDocDir.path.split("Android")[0] +
             "${Constants.appName}/$filename.epub"; //真正的文件名
-    print(path);
     File file = File(path);
     if (!await file.exists()) {
       await file.create();

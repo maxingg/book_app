@@ -26,4 +26,21 @@ class DownloadsDB {
     db.tidy();
     await db.close();
   }
+
+  Future<List> listAll() async {
+    final db = ObjectDB(await getPath());
+    db.open();
+    List val = await db.find({});
+    db.tidy();
+    await db.close();
+    return val;
+  }
+
+  remove(Map map) async{
+    final db = ObjectDB(await getPath());
+    db.open();
+    await db.remove(map);
+    db.tidy();
+    await db.close();
+  }
 }
