@@ -1,11 +1,9 @@
 import 'package:book_app/database/favourite_helper.dart';
 import 'package:book_app/model/book.dart';
-import 'package:book_app/provider/app_provider.dart';
 import 'package:book_app/tools/dio_util.dart';
 import 'package:book_app/widgets/book_card.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookTable extends StatelessWidget {
@@ -28,25 +26,17 @@ class TableBody extends StatefulWidget {
 
 class _TableBodyState extends State<TableBody> {
   List dls = List();
+  var favdb = FavouriteDB();
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    getFavDataFromDB();
-    addFavDataFromCloud();
+    addFavDataFromCloudOrDB();
   }
 
-  getFavDataFromDB() async {
-    var favdb = FavouriteDB();
-    List l = await favdb.listAll();
-    setState(() {
-      for (var sub in l) dls.add(Book.fromJson(sub["item"]));
-    });
-  }
 
-  addFavDataFromCloud() {
-    var favdb = FavouriteDB();
+  addFavDataFromCloudOrDB() {
     SharedPreferences.getInstance().then((prefs) async {
       var jwt = prefs.getString("jwt");
       RequestOptions requestOptions = new RequestOptions(
@@ -63,16 +53,28 @@ class _TableBodyState extends State<TableBody> {
       if (val != null) {
         for (var book in val) {
           Book b = Book.fromJson(book);
-          if (books.indexOf(b) == -1) {
+          if (dls.indexOf(b) == -1) {
             books.add(b);
-            List c = await favdb.check({"id": b.id});
-            if(c.isEmpty)
-              favdb.add({"id": book["id"].toString(), "item": book});
           }
+          List c = await favdb.check({"id": b.id});
+          if(c.isEmpty)
+            favdb.add({"id": book["id"].toString(), "item": book});
         }
-        setState(() {
-          dls = books;
-        });
+      } else{
+        getFavDataFromDB();
+      }
+      setState(() {
+        dls.addAll(books);
+      });
+    });
+  }
+
+  getFavDataFromDB() async {
+    List l = await favdb.listAll();
+    setState(() {
+      for (var sub in l) {
+        if(dls.indexOf(Book.fromJson(sub["item"])) == -1)     //应付无网络环境下的情况，避免重复添加
+          dls.add(Book.fromJson(sub["item"]));
       }
     });
   }

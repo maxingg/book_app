@@ -13,7 +13,7 @@ class FavouriteDB{
   add(Map item) async{
     //创建数据库实例并打开
     final db = ObjectDB(await getPath());
-    db.open();
+    db.open(false);
     db.insert(item);
     //整理.db文件
     db.tidy();
@@ -22,7 +22,7 @@ class FavouriteDB{
 
   Future<int> remove(Map item) async{
     final db = ObjectDB(await getPath());
-    db.open();
+    db.open(false);
     int val = await db.remove(item);
     db.tidy();
     await db.close();
@@ -31,7 +31,7 @@ class FavouriteDB{
 
   Future<List> check(Map item) async {
     final db = ObjectDB(await getPath());
-    db.open();
+    db.open(false);
     List val = await db.find(item);
     db.tidy();
     await db.close();
@@ -40,7 +40,7 @@ class FavouriteDB{
 
   Future<List> listAll() async {
     final db = ObjectDB(await getPath());
-    db.open();
+    db.open(false);
     List val = await db.find({});
     db.tidy();
     await db.close();
@@ -49,7 +49,7 @@ class FavouriteDB{
 
   removeAll() async {
     final db = ObjectDB(await getPath());
-    db.open();
+    db.open(false);
     await db.remove({});
     db.tidy();
     await db.close();
