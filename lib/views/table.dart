@@ -1,10 +1,15 @@
 import 'package:book_app/database/favourite_helper.dart';
 import 'package:book_app/model/book.dart';
+import 'package:book_app/provider/details_provider.dart';
 import 'package:book_app/tools/dio_util.dart';
-import 'package:book_app/widgets/book_card.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'book_detail.dart';
 
 class BookTable extends StatelessWidget {
   @override
@@ -121,4 +126,58 @@ class _TableBodyState extends State<TableBody> {
   Widget _getListData(BuildContext context, int index) {
     return BookCard(dls[index]);
   }
+ 
+  Widget BookCard(Book book) {
+    return Container(
+      width: 120,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        elevation: 4,
+        child: InkWell(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+          onTap: () {
+            Provider.of<DetailsProvider>(context, listen: false).setBook(book);
+            Provider.of<DetailsProvider>(context, listen: false).getFeed();
+            Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: BookDetails(book),
+                )).then((v) {
+                  dls = [];
+                  addFavDataFromCloudOrDB();
+                });
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+            child: Hero(
+              tag: book.id,
+              //网咯获取图片并保存至缓存
+                  child: CachedNetworkImage(
+                    imageUrl: "${book.img}",
+                    //占位图，使用循环进度条
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      "res/images/other/place.png",
+                      fit: BoxFit.fitHeight,
+                    ),
+                    fit: BoxFit.fitHeight,
+                  ),
+              ),
+            ),
+          ),
+        ),
+    );
+  }
+
 }

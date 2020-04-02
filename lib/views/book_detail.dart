@@ -32,12 +32,6 @@ class BookDetails extends StatelessWidget {
         (BuildContext context, DetailsProvider detailsProvider, Widget child) {
       return Scaffold(
         appBar: AppBar(
-          leading: new IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context, "");
-            },
-          ),
           actions: <Widget>[
             IconButton(
               onPressed: () async {
